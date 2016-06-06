@@ -1,0 +1,14 @@
+#!/bin/sh
+
+a=$(cat ~/.config/cmus/loop | head -1)
+b=$(cat ~/.config/cmus/loop | head -2 | tail -1)
+loopDuration=`expr $b - $a`
+
+loop() {
+  (echo "player-pause"; echo "seek $a"; echo "player-play") | cmus-remote
+  sleep $loopDuration
+  playingStatus=$(cmus-remote -Q | grep '^status' | cut -d' ' -f2)
+  [ $playingStatus == 'playing' ] && loop
+}
+
+loop

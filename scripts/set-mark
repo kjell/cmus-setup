@@ -1,0 +1,4 @@
+#!/bin/sh
+
+position="$(cmus-remote -Q | grep position | cut -d' ' -f2)"
+echo "$position" >> ~/.config/cmus/loop
