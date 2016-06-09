@@ -1,12 +1,17 @@
 #!/bin/sh
 
+# get playing track and set marks file
 track="$(cmus-remote -Q \
   | grep '^file' \
   | sed 's/file //; s|/Users/kjell/||; s|\..*$||')"
 file="$HOME/.config/cmus/marks/$track"
 
-a=$(cat "$file" | head -1)
-b=$(cat "$file" | head -2 | tail -1)
+# check for a search string or use the first two marks in the file
+[[ ! -z $@ ]] && match=$(grep -A1 "$@" "$file")
+[[ $? -eq 1 ]] && match=$(cat "$file")
+
+a=$(echo "$match" | head -1 | cut -d' ' -f1)
+b=$(echo "$match" | head -2 | tail -1 | cut -d' ' -f1)
 loopDuration=`expr $b - $a`
 
 loop() {

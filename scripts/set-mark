@@ -8,4 +8,4 @@ file="$HOME/.config/cmus/marks/$track"
 basedir="$(dirname "$file")"
 [[ -e "$basedir" ]] && mkdir -p "$basedir"
 
-echo "$position" >> "$file"
+echo "$position $@" >> "$file"
