@@ -3,9 +3,9 @@
 position="$(cmus-remote -Q | grep position | cut -d' ' -f2)"
 track="$(cmus-remote -Q \
   | grep '^file' \
-  | sed 's/file //; s|/Users/kjell/||; s|\..*$||')"
+  | sed 's/file //; s|'"$HOME"'||; s|\..*$||')"
 file="$HOME/.config/cmus/marks/$track"
 basedir="$(dirname "$file")"
-[[ -e "$basedir" ]] && mkdir -p "$basedir"
+[[ -e "$basedir" ]] || mkdir -p "$basedir"
 
 echo "$position $@" >> "$file"
