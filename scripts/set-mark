@@ -1,4 +1,11 @@
 #!/bin/sh
 
 position="$(cmus-remote -Q | grep position | cut -d' ' -f2)"
-echo "$position" >> ~/.config/cmus/loop
+track="$(cmus-remote -Q \
+  | grep '^file' \
+  | sed 's/file //; s|/Users/kjell/||; s|\..*$||')"
+file="$HOME/.config/cmus/marks/$track"
+basedir="$(dirname "$file")"
+[[ -e "$basedir" ]] && mkdir -p "$basedir"
+
+echo "$position" >> "$file"

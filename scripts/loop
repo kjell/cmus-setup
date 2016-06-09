@@ -1,7 +1,12 @@
 #!/bin/sh
 
-a=$(cat ~/.config/cmus/loop | head -1)
-b=$(cat ~/.config/cmus/loop | head -2 | tail -1)
+track="$(cmus-remote -Q \
+  | grep '^file' \
+  | sed 's/file //; s|/Users/kjell/||; s|\..*$||')"
+file="$HOME/.config/cmus/marks/$track"
+
+a=$(cat "$file" | head -1)
+b=$(cat "$file" | head -2 | tail -1)
 loopDuration=`expr $b - $a`
 
 loop() {
