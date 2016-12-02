@@ -5,5 +5,5 @@ Set up my [cmus](https://github.com/cmus/cmus) library:
 
 TODO
 
-* remove files with duplicate metadata? I still end up with multiple
+* remove files with duplicate metadata? `fdupes` leaves me with multiple
 copies of some albums.

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# get playing track and set marks file
+track="$(cmus-remote -Q \
+  | grep '^file' \
+  | sed 's/file //; s|'"$HOME"'||; s|\..*$||')"
+file="$HOME/.config/cmus/marks$track"
+
+echo "$file"
+[[ -f "$file" ]] && cat "$file" | grep -v 'end$' \
+  || echo 'no marks set'
