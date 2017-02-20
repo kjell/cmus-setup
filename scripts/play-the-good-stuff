@@ -2,20 +2,28 @@
 
 file=`scripts/show-marks`
 
+[[ ! -z $@ ]] && firstMatchingLine=$(grep "$@" "$file")
+
 loopAllMarkedSegments() {
   cat "$file" | while read line1; do
+    if [[ ! -z $firstMatchingLine ]]; then
+      [[ $line1 == "$firstMatchingLine" ]] || continue
+      firstMatchingLine=""
+    fi
     read line2
     a=$(echo "$line1" | cut -d' ' -f1)
     b=$(echo "$line2" | cut -d' ' -f1)
-    loopDuration=`expr $b - $a`
-    echo $line1 -- $loopDuration
-
-    (echo "player-pause"; echo "seek $a"; echo "player-play") | cmus-remote
-    sleep $loopDuration
-    # playingStatus=$(cmus-remote -Q | grep '^status' | cut -d' ' -f2)
-    # [ $playingStatus == 'playing' ] && loop
+    # if we don't have two timestamps we're at the end of the file - start over
+    if [ ! -z $b ]; then 
+      loopDuration=`expr $b - $a`
+      echo $line1 -- $loopDuration
+      (echo "player-pause"; echo "seek $a"; echo "player-play") | cmus-remote
+      tmux refresh -S -t `tmux list-clients | cut -d: -f1`
+      sleep $loopDuration
+    fi
+    ./scripts/sleep-until-play-resumes
   done
-  loopAllMarkedSegments
+  cmus-remote -Q | grep -q 'repeat.*true' && loopAllMarkedSegments
 }
 
 loopAllMarkedSegments

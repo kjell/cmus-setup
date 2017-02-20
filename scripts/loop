@@ -13,8 +13,8 @@ loopDuration=`expr $b - $a`
 loop() {
   (echo "player-pause"; echo "seek $a"; echo "player-play") | cmus-remote
   sleep $loopDuration
-  playingStatus=$(cmus-remote -Q | grep '^status' | cut -d' ' -f2)
-  [ $playingStatus == 'playing' ] && loop
+  ./scripts/sleep-until-play-resumes
+  loop
 }
 
 loop

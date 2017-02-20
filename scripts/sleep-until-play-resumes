@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# TODO: track the duration of the pause and return that integer?
+# so that the calling script can adjust how long it sleeps for
+
+while [ $(cmus-remote -Q | grep '^status' | cut -d' ' -f2) != 'playing' ]; do
+  printf '.'
+  sleep 10
+done
