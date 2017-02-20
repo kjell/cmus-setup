@@ -1,10 +1,6 @@
 #!/bin/sh
 
-# get playing track and set marks file
-track="$(cmus-remote -Q \
-  | grep '^file' \
-  | sed 's/file //; s|'"$HOME"'||; s|\..*$||; s|/Users/kjell/||')"
-file="$HOME/.config/cmus/marks/$track"
+file=`scripts/show-marks`
 
 loopAllMarkedSegments() {
   cat "$file" | while read line1; do

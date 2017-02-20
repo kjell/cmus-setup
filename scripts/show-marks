@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# get playing track and set marks file
+track="$(cmus-remote -Q \
+  | grep '^file' \
+  | sed 's/file //; s|'"$HOME"'||; s|\..*$||; s|/Users/kjell/||')"
+file="$HOME/.config/cmus/marks/$track"
+
+[[ -z file ]] && echo "cmus needs to be playing already" && exit 1
+
+echo "$file"

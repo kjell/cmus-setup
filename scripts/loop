@@ -1,10 +1,6 @@
 #!/bin/sh
 
-# get playing track and set marks file
-track="$(cmus-remote -Q \
-  | grep '^file' \
-  | sed 's/file //; s|'"$HOME"'||; s|\..*$||')"
-file="$HOME/.config/cmus/marks/$track"
+file=`scripts/show-marks`
 
 # check for a search string or use the first two marks in the file
 [[ ! -z $@ ]] && match=$(grep -A1 "$@" "$file")
