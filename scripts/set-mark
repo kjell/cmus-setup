@@ -4,3 +4,5 @@ position="$(cmus-remote -Q | grep position | cut -d' ' -f2)"
 file=`scripts/show-marks`
 
 echo "$position $@" >> "$file"
+
+tail -3 "$file"

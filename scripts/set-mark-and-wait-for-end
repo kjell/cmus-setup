@@ -1,0 +1,7 @@
+#!/bin/sh
+
+scripts/set-mark $@
+
+echo 'hit enter at end of track'
+read end
+scripts/set-mark end
