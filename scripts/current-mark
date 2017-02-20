@@ -1,0 +1,16 @@
+#!/bin/sh
+
+track="$(cmus-remote -Q \
+  | grep '^file' \
+  | sed 's/file //; s|'"$HOME"'||; s|\..*$||; s|/Users/kjell/||')"
+file="$HOME/.config/cmus/marks/$track"
+duration=`cmus-remote -Q | grep position | cut -d' ' -f2`
+
+cat "$file" | while read line1; do
+  read line2
+  a=$(echo "$line1" | cut -d' ' -f1)
+  b=$(echo "$line2" | cut -d' ' -f1)
+  if [[ $a -le $duration && $b -ge $duration ]]; then
+    echo "$line1"
+  fi
+done

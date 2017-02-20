@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# get playing track and set marks file
+track="$(cmus-remote -Q \
+  | grep '^file' \
+  | sed 's/file //; s|'"$HOME"'||; s|\..*$||; s|/Users/kjell/||')"
+file="$HOME/.config/cmus/marks/$track"
+
+loopAllMarkedSegments() {
+  cat "$file" | while read line1; do
+    read line2
+    a=$(echo "$line1" | cut -d' ' -f1)
+    b=$(echo "$line2" | cut -d' ' -f1)
+    loopDuration=`expr $b - $a`
+    echo $line1 -- $loopDuration
+
+    (echo "player-pause"; echo "seek $a"; echo "player-play") | cmus-remote
+    sleep $loopDuration
+    # playingStatus=$(cmus-remote -Q | grep '^status' | cut -d' ' -f2)
+    # [ $playingStatus == 'playing' ] && loop
+  done
+  loopAllMarkedSegments
+}
+
+loopAllMarkedSegments
