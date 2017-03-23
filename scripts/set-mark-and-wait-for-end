@@ -1,7 +1,17 @@
 #!/bin/sh
 
-scripts/set-mark $@
+if [ "$1" == "--interactive" ]; then
+  interactive=true
+  echo 'enter track name:'
+  read name
+else
+  name=$@
+fi
+
+scripts/set-mark $name
 
 echo 'hit enter at end of track'
 read end
 scripts/set-mark end
+
+$interactive && scripts/set-mark-and-wait-for-end --interactive
