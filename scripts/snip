@@ -1,0 +1,46 @@
+#!/usr/local/bin/bash
+# 'cuts' a long track with a marks file into 'snips' and puts them into
+#     _snips/<artist>/<trackname>/<segment names>.mp3
+# Also joins all the segments into `.../joined.mp3`
+# Operates on the currently playing track
+
+marksFile=`scripts/show-marks`
+audioFile="$(cmus-remote -Q | grep '^file' | sed 's/file //')"
+album=$(basename "$audioFile" | sed 's/\..*$//')
+artist=$(id3v2 -l "$audioFile" | grep TP1 | cut -d':' -f2 | sed 's/^ //')
+dir="_snips/$artist/$album"
+
+[ -d "$dir" ] || mkdir -p "$dir"
+
+index=0
+cat "$marksFile" | grep -v '^#' | while read line1; do
+	read line2
+	a=$(echo "$line1" | cut -d' ' -f1)
+	b=$(echo "$line2" | cut -d' ' -f1)
+	trackName=$(echo "$line1" | cut -d' ' -f2-100 | sed 's|/|-|g')
+	index=$((index+1))
+
+	if [ ! -z $b ]; then 
+		loopDuration=`expr $b - $a`
+		snippedFileName="$dir/$index - $trackName.mp3"
+		filename="$snippedFileName"
+		>&2 echo $line1 -- duration $loopDuration, $filename
+		[ -f "$filename" ] && continue
+
+		(
+		{
+			ffmpeg -loglevel error -ss $a -t $loopDuration -i "$audioFile" -acodec copy "$filename"
+			id3v2 -t "$trackName" -a "$artist" -A "$album" -T $index "$filename"
+		} &
+		)
+	fi
+done
+
+# TODO: currently, this runs before the forked `ffmpeg` processes from the loop
+# above complete, and only joins the first few completed segments. How to wait 
+# for all the forked jobs to complete?
+joinedFile="$dir/joined.mp3"
+[ -f "$joinedFile" ] || {
+  ffmpeg -loglevel quiet -f concat -safe 0 -i <(printf "file '$PWD/%s'\n" ./"$dir"/*.mp3) -c copy "$joinedFile"
+  id3v2 -a "$artist" -A "$album" "$joinedFile"
+}
