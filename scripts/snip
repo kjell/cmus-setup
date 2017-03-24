@@ -1,7 +1,10 @@
 #!/usr/local/bin/bash
-# 'cuts' a long track with a marks file into 'snips' and puts them into
+
+# Cut long track with a marks file into 'snips' and put them into
+#
 #     _snips/<artist>/<trackname>/<segment names>.mp3
-# Also joins all the segments into `.../joined.mp3`
+#
+# Also joins all the segments into a `.../joined.mp3`
 # Operates on the currently playing track
 
 marksFile=`scripts/show-marks`

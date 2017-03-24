@@ -1,9 +1,13 @@
 #!/bin/sh
 
-# TODO: track the duration of the pause and return that integer?
-# so that the calling script can adjust how long it sleeps for
+# When `cmus` is paused, this will sit and wait until playback resumes so other
+# scripts can adjust
 
 while [ $(cmus-remote -Q | grep '^status' | cut -d' ' -f2) != 'playing' ]; do
   printf '.'
   sleep 10
 done
+
+# TODO: track the duration of the pause and return that integer?
+# so that the calling script can adjust how long it sleeps for
+

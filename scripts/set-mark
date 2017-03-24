@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Set a mark with whatever arguments at the current time
+
 position="$(cmus-remote -Q | grep position | cut -d' ' -f2)"
 file=`scripts/show-marks`
 

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Show the file where marks for the currently playing track belong
+
 # get playing track and set marks file
 track="$(cmus-remote -Q \
   | grep '^file' \

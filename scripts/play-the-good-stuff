@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Play through each segment, skipping everything in between
+
 file=`scripts/show-marks`
 
 [[ ! -z $@ ]] && firstMatchingLine=$(grep "$@" "$file")

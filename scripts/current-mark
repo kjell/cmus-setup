@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# If the currently playing track has a marks file, check to see if it's
+# currently playing within a marked segment, and if so,
+# print the name of that mark
+
 track="$(cmus-remote -Q \
   | grep '^file' \
   | sed 's/file //; s|'"$HOME"'||; s|\..*$||; s|/Users/kjell/||')"

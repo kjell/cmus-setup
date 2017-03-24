@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Show the named segments
+
 # get playing track and set marks file
 track="$(cmus-remote -Q \
   | grep '^file' \

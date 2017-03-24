@@ -1,10 +1,11 @@
 #!/bin/sh
-#
-# TODO: find the closest mark and skip to the next
-# or skip to a mark by searching the name
 
+# start playback from a matching named segment 
 
 file=`scripts/show-marks`
 position=`grep "$@" "$file" | cut -d ' ' -f1`
 
 [[ ! -z $position ]] && echo "seek $position" | cmus-remote
+
+# TODO: find the closest mark and skip to the next
+

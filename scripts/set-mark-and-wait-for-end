@@ -1,5 +1,12 @@
 #!/bin/sh
 
+# Set a mark, then wait for a keyboard event to end the segment with an 'end'
+# mark.
+#
+# When given the argument `--interactive` it will ask for a track name and
+# wait.  When the track ends, it will start over again to make setting marks
+# through a long recording easier.
+
 if [ "$1" == "--interactive" ]; then
   interactive=true
   echo 'enter track name:'

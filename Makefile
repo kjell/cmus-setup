@@ -18,3 +18,12 @@ remove-duplicate-tracks: dupes.txt
 		echo "mark filename=\"$$track\"" | cmus-remote; \
 		echo "win-remove" | cmus-remote; \
 	done
+
+documentReadme:
+	@(sed '/---/q' readme.md; \
+  echo "\n# Commands\n"; \
+	ls scripts/ | grep -v '^_' | sort | while read script; do \
+			echo "## \`$$script\`"; \
+			echo "$$(tail -n+2 scripts/$$script | head -7 | grep '^#\|^$$' | sed 's/^#//g; s/^ //g')"; \
+			echo; \
+	done | remark) | sponge readme.md
